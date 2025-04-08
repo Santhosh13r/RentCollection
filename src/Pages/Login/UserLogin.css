@@ -1,0 +1,137 @@
+.signup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: rgb(114, 136, 200);
+}
+
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 25px;
+    box-shadow: 0 0 10px 0 rgba(16, 14, 14, 0.1);
+    padding: 50px;
+    width: 450px;
+    height: 500px;
+}
+
+.card h2 {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.card label {
+    font-size: 20px;
+    font-stretch: ultra-expanded;
+    margin-right: 16em;
+    margin-bottom: 10px;
+}
+
+.card input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 20px;
+    border-radius: 5px;
+    border: 1px solid rgb(114, 136, 200);
+}
+
+.card button {
+    width: 100%;
+    padding: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.card button:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s;
+}
+
+/* Media Queries for Responsive Design */
+
+/* For tablets and small screens (max-width: 768px) */
+@media (max-width: 768px) {
+    .card {
+        width: 90%;
+        height: auto;
+        padding: 30px;
+    }
+
+    .card h2 {
+        font-size: 30px;
+    }
+
+    .card label {
+        font-size: 16px;
+        margin-right: 0;
+    }
+
+    .card input {
+        font-size: 16px;
+        padding: 8px;
+    }
+
+    .card button {
+        font-size: 18px;
+        padding: 8px;
+    }
+}
+
+/* For mobile screens (max-width: 576px) */
+@media (max-width: 576px) {
+    .card {
+        width: 100%;
+        height: auto;
+        padding: 20px;
+        border-radius: 15px;
+    }
+
+    .card h2 {
+        font-size: 24px;
+    }
+
+    .card label {
+        font-size: 14px;
+    }
+
+    .card input {
+        font-size: 14px;
+        padding: 6px;
+    }
+
+    .card button {
+        font-size: 16px;
+        padding: 6px;
+    }
+}
+
+/* For extra small screens (max-width: 400px) */
+@media (max-width: 400px) {
+    .card {
+        padding: 15px;
+    }
+
+    .card h2 {
+        font-size: 20px;
+    }
+
+    .card label {
+        font-size: 12px;
+    }
+
+    .card input {
+        font-size: 12px;
+        padding: 5px;
+    }
+
+    .card button {
+        font-size: 14px;
+        padding: 5px;
+    }
+}

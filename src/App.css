@@ -1,0 +1,33 @@
+
+
+.navbar-brand{
+  position: fixed;
+  font-weight: 800;
+  font-family: 'Times New Roman', Times, serif;
+  margin-top: 0.1rem;
+}
+
+/* filepath: c:\Users\santh\RentCollection\src\Pages\Home.css */
+.hero-section {
+  background: linear-gradient(to right, #487ee2, #5642c7);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.feature-box {
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.feature-box:hover {
+  transform: scale(1.05);
+}
+
+.animate__animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}

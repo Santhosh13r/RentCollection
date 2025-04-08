@@ -1,0 +1,64 @@
+.register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.card {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.card label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.card input,
+.card textarea {
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+}
+
+.card button {
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.card button:hover {
+  background-color: #0056b3;
+  color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .card {
+    padding: 20px;
+  }
+
+  .card h2 {
+    font-size: 20px;
+  }
+
+  .card input,
+  .card textarea {
+    font-size: 12px;
+  }
+
+  .card button {
+    font-size: 14px;
+  }
+}

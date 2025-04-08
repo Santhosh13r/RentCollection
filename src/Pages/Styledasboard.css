@@ -1,0 +1,97 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    width: 250px;
+    height: 100%;
+    background-color: rgb(62, 60, 60);
+}
+
+.sidebar a {
+    font-weight: 600;
+    justify-content: space-between;
+    padding-left: 15px;
+    text-align: left;
+    color: #f5f2f2;
+}
+
+.sidebar a:hover {
+    background-color: #535151;
+    cursor: pointer;
+    color: aliceblue;
+    border-radius: 25px;
+}
+
+.client-img {
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: -50px;
+    margin-bottom: 10px;
+    border: 2px solid #f5f2f2;
+    position: relative;
+}
+
+/* Media Queries for Responsive Design */
+
+/* For tablets and small screens (max-width: 768px) */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    .sidebar a {
+        font-size: 14px;
+        padding-left: 10px;
+    }
+
+    .client-img {
+        width: 150px;
+        height: 150px;
+        margin-top: -30px;
+    }
+}
+
+/* For mobile screens (max-width: 576px) */
+@media (max-width: 576px) {
+    .sidebar {
+        width: 150px;
+    }
+
+    .sidebar a {
+        font-size: 12px;
+        padding-left: 8px;
+    }
+
+    .client-img {
+        width: 120px;
+        height: 120px;
+        margin-top: -20px;
+    }
+}
+
+/* For extra small screens (max-width: 400px) */
+@media (max-width: 400px) {
+    .sidebar {
+        width: 100px;
+    }
+
+    .sidebar a {
+        font-size: 10px;
+        padding-left: 5px;
+    }
+
+    .client-img {
+        width: 100px;
+        height: 100px;
+        margin-top: -10px;
+    }
+}
+
+
