@@ -3,9 +3,6 @@ import '../Styledasboard.css'
 import Nav from '../../Companents/Nav';
 import { Link } from 'react-router-dom';
 
-
-
-
 const Dashboard = () => {
     const clients = [
         { Client_ID: 1, Name: "John Doe", Gender: "male", MobileNO: "123-456-7890",  DueAmount: 1000 },

@@ -8,9 +8,11 @@ import Admindashboard from './Pages/Dashboard/Admindashboard'
 import UserLogin from './Pages/Login/UserLogin'
 import UserRegister from './Pages/Login/UserRegister'
 import ClientDashboard from './Pages/Dashboard/ClientDashboard'
-import AdminLogin from './Pages/Login/AdminLogin'
+
 
 function App() {
+
+    
   return (
     <BrowserRouter>
       <Routes>
@@ -18,8 +20,7 @@ function App() {
         <Route path='/Admin' element={<Admindashboard />} />
         <Route path='/login' element={<UserLogin />} />
         <Route path="/Register" element={<UserRegister />} />
-        <Route path='/ClientDashboard' element={<ClientDashboard />} />
-        <Route path='/Adminlogin' element={<AdminLogin />} />
+       <Route path='/ClientDashboard' element={<ClientDashboard />} /> 
       </Routes>
     </BrowserRouter>
   )

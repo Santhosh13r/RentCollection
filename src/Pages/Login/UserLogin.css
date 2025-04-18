@@ -1,137 +1,158 @@
-.signup {
+/* Global Signup Container */
+.login {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: rgb(114, 136, 200);
-}
-
-.card {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: white;
-    border-radius: 25px;
-    box-shadow: 0 0 10px 0 rgba(16, 14, 14, 0.1);
-    padding: 50px;
-    width: 450px;
-    height: 500px;
-}
-
-.card h2 {
-    font-size: 40px;
+    background: linear-gradient(135deg, #74ebd5, #acb6e5);
+    
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Signup Card Styling */
+  .card {
+    background-color: #ece9e9;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(8, 8, 8, 0.15);
+    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Heading */
+  .card h2 {
+    font-size: 36px;
     font-weight: 700;
-    margin-bottom: 20px;
-}
-
-.card label {
-    font-size: 20px;
-    font-stretch: ultra-expanded;
-    margin-right: 16em;
-    margin-bottom: 10px;
-}
-
-.card input {
+    color: #333;
+    margin-bottom: 25px;
+    text-align: center;
+  }
+  
+  /* Labels */
+  .card label {
+    display: block;
+    font-size: 18px;
+    color: #0e0d0d;
+    margin-bottom: 8px;
+    margin-top: 10px;
+  }
+  
+  /* Inputs */
+  .card input,
+  .card textarea {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    font-size: 20px;
-    border-radius: 5px;
-    border: 1px solid rgb(114, 136, 200);
-}
-
-.card button {
+    padding: 12px 15px;
+    font-size: 2rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    transition: border 0.3s ease;
+  }
+  
+  .card input:focus,
+  .card textarea:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(7, 13, 19, 0.3);
+  }
+  
+  /* Button */
+  .card button {
     width: 100%;
-    padding: 10px;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-.card button:hover {
-    transform: scale(1.1);
-    transition: transform 0.2s;
-}
-
-/* Media Queries for Responsive Design */
-
-/* For tablets and small screens (max-width: 768px) */
-@media (max-width: 768px) {
+    padding: 12px;
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: 600;
+    background-color: #007bff;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    transition: all 0.3s ease;
+  }
+  
+  .card button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+  }
+  
+  /* Responsive Design */
+  
+  /* Tablets and below */
+  @media (max-width: 768px) {
     .card {
-        width: 90%;
-        height: auto;
-        padding: 30px;
+      padding: 30px;
+      max-width: 50%;
     }
-
+  
     .card h2 {
-        font-size: 30px;
+      font-size: 30px;
     }
-
+  
     .card label {
-        font-size: 16px;
-        margin-right: 0;
+      font-size: 15px;
     }
-
-    .card input {
-        font-size: 16px;
-        padding: 8px;
+  
+    .card input,
+    .card textarea {
+      font-size: 2rem;
+    
     }
-
+  
     .card button {
-        font-size: 18px;
-        padding: 8px;
+      font-size: 18px;
     }
-}
-
-/* For mobile screens (max-width: 576px) */
-@media (max-width: 576px) {
+  }
+  
+  /* Mobile phones */
+  @media (max-width: 576px) {
+    .signup {
+      padding: 20px;
+    }
+  
     .card {
-        width: 100%;
-        height: auto;
-        padding: 20px;
-        border-radius: 15px;
+      padding: 25px;
+      border-radius: 15px;
     }
-
+  
     .card h2 {
-        font-size: 24px;
+      font-size: 24px;
     }
-
+  
     .card label {
-        font-size: 14px;
+      font-size: 14px;
     }
-
-    .card input {
-        font-size: 14px;
-        padding: 6px;
+  
+    .card input,
+    .card textarea {
+      font-size: 14px;
+      padding: 10px;
     }
-
+  
     .card button {
-        font-size: 16px;
-        padding: 6px;
+      font-size: 15px;
     }
-}
-
-/* For extra small screens (max-width: 400px) */
-@media (max-width: 400px) {
+  }
+  
+  /* Extra small devices */
+  @media (max-width: 400px) {
     .card {
-        padding: 15px;
+      padding: 25px;
     }
-
+  
     .card h2 {
-        font-size: 20px;
+      font-size: 20px;
     }
-
-    .card label {
-        font-size: 12px;
-    }
-
-    .card input {
-        font-size: 12px;
-        padding: 5px;
-    }
-
+  
+    .card label,
+    .card input,
     .card button {
-        font-size: 14px;
-        padding: 5px;
+      font-size: 13px;
     }
-}
+  }
+  
