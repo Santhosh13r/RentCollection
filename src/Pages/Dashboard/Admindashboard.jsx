@@ -4,6 +4,7 @@ import Nav from '../../Companents/Nav';
 import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
+
     const clients = [
         { Client_ID: 1, Name: "John Doe", Gender: "male", MobileNO: "123-456-7890",  DueAmount: 1000 },
         { Client_ID: 2, Name: "Jane Smith", Gender: "Female", MobileNO: "987-654-3210",  DueAmount: 0 },
@@ -14,16 +15,16 @@ const Dashboard = () => {
         { Client_ID: 6, Name: "Smith", Gender: "Female", MobileNO: "987-654-3210",  DueAmount: 0 },
         { Client_ID: 6, Name: "Jane Smith", Gender: "Female", MobileNO: "987-654-3210",  DueAmount: 0 },
 
-
     ];
+
     const totalamount = clients.filter(c => c.DueAmount > 0).length * 1000;
     const totaldue = clients.filter(c => c.DueAmount >=1000).length * 1000;
     const totalclients = clients.length;
+
     return (
         <>
             <Nav/>
             <div className="container-fluid ">
-
                 <div className="row">
                     <nav className='col-md-3  col-lg-2 px-md-0 bg-light sidebar'>
                         <div className="sidebar ">
@@ -53,7 +54,6 @@ const Dashboard = () => {
                         </div>
                     </nav>
                     <main className='col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5 pt-5'>
-
                         <div className="d-flex flex-row mb-3 justify-content-between">
                             <div class="p-2 border border-black bg-secondary shadow ">
                                 
@@ -64,7 +64,6 @@ const Dashboard = () => {
                                             {totalamount}
                                         </div>
                                     </div>
-                                
                             </div>
 
                             <div class="p-2 border border-black-5 bg-secondary shadow mr-5  ">

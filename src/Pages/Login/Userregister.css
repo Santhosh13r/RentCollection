@@ -1,7 +1,7 @@
 /* Background with smooth gradient */
 .register {
   background: linear-gradient(135deg, #186dee, #9eeae7);
-  min-height: 100vh;
+  min-height: 150vh;
   display: flex;
   align-items: center;
   justify-content: center;

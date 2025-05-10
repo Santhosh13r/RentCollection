@@ -1,79 +1,92 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './UserLogin.css';
-import { Link, useNavigate } from 'react-router-dom';
-import supabase from '../../config/supabaseClient';
 
-const UserLogin = () => {
+const Login = () => {
     const navigate = useNavigate();
-    const [user, setUser] = useState({ email: "", password: "" });
-    const [errorMessage, setErrorMessage] = useState("");
+    const [formData, setFormData] = useState({ email: '', password: '' });
+    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
-    // Handle input changes
     const handleChange = (e) => {
-        setUser({ ...user, [e.target.name]: e.target.value });
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
         setLoading(true);
-        setErrorMessage("");
 
         try {
-            // Authenticate with Supabase
-         const { data, error } = await supabase.auth.signInWithPassword({
-                email: user.email,  
-                password: user.password
-         });
+            const response = await axios.post('http://localhost:8083/api/auth/login', formData, {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            });
 
-         if(error) {
-                setErrorMessage("Invalid email or password. Please try again." , error.message);
+            const { token, user } = response.data;
 
-                console.error('Login error:', error);
-                return;
+            if (!token) {
+                throw new Error('Login failed. No token received from the server.');
             }
-            else{
-                console.log("Login successful:", data);
-                navigate('/ClientDashboard'); // Redirect to the client dashboard after successful login
-            }
-           
+
+            // Store token and user data in localStorage
+            localStorage.setItem('token', token);
+            localStorage.setItem('userData', JSON.stringify(user));
+
+            // Navigate to dashboard
+            navigate('/dashboard');
         } catch (err) {
-            console.error('Unexpected error:', err);
-            setErrorMessage('An unexpected error occurred. Please try again.');
+            console.error("Login error:", err);
+            setError(err.response?.data?.message || err.message || 'Login failed.');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="container-fluid login ">
-            <div className="card shadow-lg p-3 mb-5 bg-white align-items-center ">
-                <h2><i className="fa-solid fa-users pt-3"></i></h2>
-                <div className="card-body">
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-group">
-                            <label>Email</label>
-                            <input type="email" className="form-control" name="email" required onChange={handleChange} />
+        <div className="container mt-5">
+            <div className="row justify-content-center">
+                <div className="col-md-6 col-lg-4">
+                    <div className="card shadow border-0">
+                        <div className="card-body">
+                            <h3 className="text-center mb-4">Login</h3>
+                            {error && <div className="alert alert-danger">{error}</div>}
+
+                            <form onSubmit={handleSubmit}>
+                                <div className="mb-3">
+                                    <label>Email</label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        className="form-control"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <label>Password</label>
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        className="form-control"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+
+                                <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+                                    {loading ? 'Logging in...' : 'Login'}
+                                </button>
+                            </form>
                         </div>
-                        <div className="form-group mt-3">
-                            <label>Password</label>
-                            <input type="password" className="form-control" name="password" required onChange={handleChange} />
-                        </div>
-                        {errorMessage && <div className="alert alert-danger mt-2">{errorMessage}</div>}
-                    
-                        <button type="submit" className="btn btn-primary w-100 mt-3" disabled={loading}>
-                            {loading ? "Signing In..." : "Sign In"}
-                        </button>
-                        <div className="account-footer text-center mt-2">
-                            <p>New here? <Link to="/Register">Register</Link></p>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     );
 };
 
-export default UserLogin;
+export default Login;
