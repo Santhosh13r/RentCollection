@@ -1,18 +1,17 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
-import './App.css'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Importing components
-import Home from './Pages/Home'
-import Admindashboard from './Pages/Dashboard/Admindashboard'
-import UserLogin from './Pages/Login/UserLogin'
-import UserRegister from './Pages/Login/UserRegister'
-import ClientDashboard from './Pages/Dashboard/ClientDashboard'
-
+import Home from './Pages/Home';
+import Admindashboard from './Pages/Dashboard/Admindashboard';
+import UserLogin from './Pages/Login/UserLogin';
+import UserRegister from './Pages/Login/UserRegister';
+import ClientDashboard from './Pages/Dashboard/ClientDashboard';
+import UserPayment from './Components/UserPayment'; // Fixed typo in folder name
+import Invoice from './Components/Invoice'; // Fixed typo in folder name
 
 function App() {
-
-    
   return (
     <BrowserRouter>
       <Routes>
@@ -20,10 +19,12 @@ function App() {
         <Route path='/Admin' element={<Admindashboard />} />
         <Route path='/login' element={<UserLogin />} />
         <Route path="/Register" element={<UserRegister />} />
-       <Route path='/ClientDashboard' element={<ClientDashboard />} /> 
+        <Route path='/ClientDashboard' element={<ClientDashboard />} />
+        <Route path='/Invoice' element={<Invoice />} />
+        <Route path='/UserPayment' element={<UserPayment />} />
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;
