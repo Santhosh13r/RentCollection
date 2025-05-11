@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { data, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Login = () => {
@@ -24,24 +24,36 @@ const Login = () => {
                 withCredentials: true
             });
 
-            const { token, user } = response.data;
+            const data = response.data; // Extract response data
+            console.log("Login response data:", data);
 
-            if (!token) {
-                throw new Error('Login failed. No token received from the server.');
+            if (!data) {
+                throw new Error('Login failed. No data received.');
+            } else if (response.status !== 200) {
+                throw new Error(data.message || 'Invalid credentials. Please try again.');
+                navigate('/Register');
             }
 
-            // Store token and user data in localStorage
-            localStorage.setItem('token', token);
-            localStorage.setItem('userData', JSON.stringify(user));
+            // Store user data in localStorage
+            localStorage.setItem('userData', JSON.stringify(data));
 
             // Navigate to dashboard
-            navigate('/dashboard');
+            navigate('/ClientDashboard');
+
         } catch (err) {
             console.error("Login error:", err);
-            setError(err.response?.data?.message || err.message || 'Login failed.');
+            setError(err.response?.data?.message || err.message || 'An unexpected error occurred.');
         } finally {
             setLoading(false);
         }
+
+        // Function to delete user data from localStorage
+        const clearUserData = () => {
+            localStorage.removeItem('userData');
+            console.log("User data removed from localStorage.");
+        };
+
+        // Example usage: Call `clearUserData()` when logging out or as needed
     };
 
     return (

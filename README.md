@@ -1,12 +1,46 @@
-# React + Vite
+Rent Collection
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Rent Collection is a modern rent management system built with React and a Spring Boot backend using MySQL for data storage.
+Features
 
-Currently, two official plugins are available:
+    Responsive user interface powered by Bootstrap 5.3.3.
+    Smooth animations using Farmer Motion.
+    Secure backend developed with Spring Boot.
+    Persistent data storage with MySQL.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Technologies Used
 
-## Expanding the ESLint configuration
+    React: Frontend framework for building user interfaces.
+    Spring Boot: Backend framework for RESTful APIs and business logic.
+    MySQL: Relational database for data persistence.
+    Bootstrap 5.3.3: UI framework for responsive design.
+    Farmer Motion: Animation library for React.
+    Axios: HTTP client for API communication.
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Installation
+Backend (Spring Boot)
+
+    Clone the repository:
+    bash
+
+git clone https://github.com/Santhosh13r/RentCollection.git
+
+Navigate to the backend directory.
+Configure the database in application.properties.
+Run the Spring Boot server:
+bash
+
+    mvn spring-boot:run
+
+Frontend (React)
+
+    Navigate to the frontend directory.
+    Install dependencies:
+    bash
+
+npm install
+
+Start the React app:
+bash
+
+npm start

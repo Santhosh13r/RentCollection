@@ -8,8 +8,7 @@ import Admindashboard from './Pages/Dashboard/Admindashboard';
 import UserLogin from './Pages/Login/UserLogin';
 import UserRegister from './Pages/Login/UserRegister';
 import ClientDashboard from './Pages/Dashboard/ClientDashboard';
-import UserPayment from './Components/UserPayment'; // Fixed typo in folder name
-import Invoice from './Components/Invoice'; // Fixed typo in folder name
+
 
 function App() {
   return (
@@ -20,8 +19,7 @@ function App() {
         <Route path='/login' element={<UserLogin />} />
         <Route path="/Register" element={<UserRegister />} />
         <Route path='/ClientDashboard' element={<ClientDashboard />} />
-        <Route path='/Invoice' element={<Invoice />} />
-        <Route path='/UserPayment' element={<UserPayment />} />
+        
       </Routes>
     </BrowserRouter>
   );
