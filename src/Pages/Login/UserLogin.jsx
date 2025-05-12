@@ -31,7 +31,7 @@ const Login = () => {
                 throw new Error('Login failed. No data received.');
             } else if (response.status !== 200) {
                 throw new Error(data.message || 'Invalid credentials. Please try again.');
-                navigate('/Register');
+                
             }
 
             // Store user data in localStorage

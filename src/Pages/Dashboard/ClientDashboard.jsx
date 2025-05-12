@@ -1,150 +1,299 @@
-import React, { useEffect, useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState, useEffect } from 'react';
+import { Container, Row, Col, Card, Button, Form, Badge, Tab, Nav } from 'react-bootstrap';
+import { 
+  FaUser, FaHome, FaDollarSign, FaCalendarAlt, FaPhoneAlt, 
+  FaCreditCard, FaReceipt, FaLock, FaCheckCircle, FaGooglePay 
+} from 'react-icons/fa';
 
-const ClientDashboard = () => {
-    const [user, setUser] = useState(null);
+const RentPaymentDashboard = () => {
+  const [activeTab, setActiveTab] = useState('online');
+  const [cardDetails, setCardDetails] = useState({
+    number: '',
+    expiry: '',
+    cvv: ''
+  });
+  const [paymentAmount, setPaymentAmount] = useState('');
+  const [paymentScreenshot, setPaymentScreenshot] = useState(null);
+  const [user, setUser] = useState(null);
 
-    useEffect(() => {
-        const fetchUserData = () => {
-            const storedUser = localStorage.getItem('userData'); // Updated key to match login storage
-            if (storedUser) {
-                try {
-                    setUser(JSON.parse(storedUser));
-                } catch (error) {
-                    console.error("Error parsing user data from localStorage:", error);
-                }
-            }
-        };
+  useEffect(() => {
+    // Fetch user data from localStorage
+    const storedUser = localStorage.getItem('userData');
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+      } catch (error) {
+        console.error("Error parsing user data from localStorage:", error);
+      }
+    }
+  }, []);
 
-        fetchUserData();
+  const handleCardChange = (e) => {
+    const { name, value } = e.target;
+    setCardDetails(prev => ({ ...prev, [name]: value }));
+  };
 
-        // Optional: Add an event listener to detect changes in localStorage
-        const handleStorageChange = () => fetchUserData();
-        window.addEventListener('storage', handleStorageChange);
+  const handleFileChange = (e) => {
+    setPaymentScreenshot(e.target.files[0]);
+  };
 
-        return () => {
-            window.removeEventListener('storage', handleStorageChange);
-        };
-    }, []);
+  const handleSubmitPayment = async (e) => {
+    e.preventDefault();
+    if (!paymentAmount || isNaN(paymentAmount) || paymentAmount <= 0) {
+      alert('Please enter a valid payment amount.');
+      return;
+    }
 
-    if (!user) return <p className="text-center mt-5">Loading user data...</p>;
+    try {
+      // Create an order on the backend
+      const response = await fetch('http://localhost:8083/api/payment/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: paymentAmount * 100 }) // Amount in paise
+      });
 
-    return (
-        <div className="container mt-5">
-    <div className="row">
-        {/* User Profile Card - 4 columns */}
-        <div className="col-md-4 mb-4">
-            <div className="card shadow border-0" style={{ 
-                background: 'linear-gradient(135deg, #e6f2ff 0%, #cce5ff 100%)',
-                borderLeft: '5px solid #4d94ff',
-                borderRadius: '10px'
-            }}>
-                <div className="card-body text-center py-4">
-                    <div className="mb-3">
-                        <i className="fas fa-user-circle" style={{ 
-                            fontSize: '3rem', 
-                            color: '#4d94ff' 
-                        }}></i>
-                    </div>
-                    <h4 className="card-title mb-3" style={{ color: '#0066cc' }}>Welcome, {user.name || "User"}!</h4>
-                    <div className="text-start ps-4">
-                        <p className="card-text mb-2">
-                            <i className="fas fa-envelope me-2" style={{ color: '#4d94ff' }}></i>
-                            <strong>Email:</strong> {user.email}
-                        </p>
-                        {user.role && <p className="card-text mb-2">
-                            <i className="fas fa-user-tag me-2" style={{ color: '#4d94ff' }}></i>
-                            <strong>Role:</strong> {user.role}
-                        </p>}
-                        {user.phone && <p className="card-text mb-2">
-                            <i className="fas fa-phone me-2" style={{ color: '#4d94ff' }}></i>
-                            <strong>Phone:</strong> {user.phone}
-                        </p>}
-                        {user.address && <p className="card-text mb-2">
-                            <i className="fas fa-map-marker-alt me-2" style={{ color: '#4d94ff' }}></i>
-                            <strong>Address:</strong> {user.address}
-                        </p>}
-                        {user.pincode && <p className="card-text mb-2">
-                            <i className="fas fa-map-pin me-2" style={{ color: '#4d94ff' }}></i>
-                            <strong>Pincode:</strong> {user.pincode}
-                        </p>}
-                        {user.city && <p className="card-text mb-2">
-                            <i className="fas fa-city me-2" style={{ color: '#4d94ff' }}></i>
-                            <strong>City:</strong> {user.city}
-                        </p>}
-                        {user.state && <p className="card-text mb-2">
-                            <i className="fas fa-flag me-2" style={{ color: '#4d94ff' }}></i>
-                            <strong>State:</strong> {user.state}
-                        </p>}
-                    </div>
-                </div>
+      const orderData = await response.json();
+      if (!orderData || !orderData.id) {
+        throw new Error('Failed to create Razorpay order.');
+      }
+
+      // Initialize Razorpay
+      const options = {
+        key: 'YOUR_RAZORPAY_KEY', // Replace with your Razorpay key
+        amount: orderData.amount,
+        currency: 'INR',
+        name: 'Rent Collection',
+        description: 'Rent Payment',
+        order_id: orderData.id,
+        handler: function (response) {
+          alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
+          // Handle payment success (e.g., update backend and UI)
+        },
+        prefill: {
+          name: user.name,
+          email: user.email,
+          contact: user.phone || ''
+        },
+        theme: {
+          color: '#4a89dc'
+        }
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } catch (error) {
+      console.error('Payment error:', error);
+      alert('Failed to initiate payment. Please try again.');
+    }
+  };
+
+  if (!user) return <p className="text-center mt-5">Loading user data...</p>;
+
+  return (
+    <div className="container-fluid py-4" style={{ backgroundColor: '#f5f9ff', minHeight: '100vh' }}>
+      <div className="row g-4">
+        {/* User Profile Column */}
+        <div className="col-lg-4">
+          <div className="card border-0 shadow-sm h-100">
+            <div 
+              className="text-white p-4" 
+              style={{ 
+                background: 'linear-gradient(135deg, #4a89dc, #7ab3ef)',
+                borderTop: '4px solid #4a89dc'
+              }}
+            >
+              <div className="d-flex flex-column align-items-center">
+                <img 
+                  src="https://randomuser.me/api/portraits/women/45.jpg" 
+                  alt="Profile" 
+                  className="rounded-circle border border-3 border-white mb-3"
+                  style={{ width: '80px', height: '80px', objectFit: 'cover' }}
+                />
+                <h4 className="mb-1">{user.name || "User"}</h4>
+                <small>ID: {user.id || "N/A"}</small>
+              </div>
             </div>
+            
+            <div className="card-body">
+              <div className="d-flex align-items-start mb-3">
+                <div className="me-3 p-2 rounded-circle" style={{ backgroundColor: '#e6f0fa', color: '#4a89dc' }}>
+                  <i className="fas fa-home"></i>
+                </div>
+                <div>
+                  <h6 className="text-muted mb-0">Address</h6>
+                  <p className="mb-0 fw-bold">{user.address || "N/A"}</p>
+                </div>
+              </div>
+              
+              <div className="d-flex align-items-start mb-3">
+                <div className="me-3 p-2 rounded-circle" style={{ backgroundColor: '#e6f0fa', color: '#4a89dc' }}>
+                  <i className="fas fa-map-pin"></i>
+                </div>
+                <div>
+                  <h6 className="text-muted mb-0">Pincode</h6>
+                  <p className="mb-0 fw-bold">{user.pincode || "N/A"}</p>
+                </div>
+              </div>
+              
+              <div className="d-flex align-items-start">
+                <div className="me-3 p-2 rounded-circle" style={{ backgroundColor: '#e6f0fa', color: '#4a89dc' }}>
+                  <i className="fas fa-envelope"></i>
+                </div>
+                <div>
+                  <h6 className="text-muted mb-0">Email</h6>
+                  <p className="mb-0 fw-bold">{user.email || "N/A"}</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Rent Payment Table - 8 columns */}
-        <div className="col-md-8">
-            <div className="card shadow border-0">
-                <div className="card-header bg-primary text-white">
-                    <h5 className="mb-0">Next Month's Rent Payment</h5>
+        {/* Payment Dashboard Column */}
+        <div className="col-lg-8">
+          <div className="card border-0 shadow-sm">
+            <div className="card-body">
+              <div className="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
+                <h4 className="mb-0" style={{ color: '#4a89dc' }}>Rent Payment</h4>
+              </div>
+              
+              <form onSubmit={handleSubmitPayment}>
+                <div className="mb-3">
+                  <label htmlFor="paymentAmount" className="form-label">Enter Payment Amount</label>
+                  <input 
+                    type="number" 
+                    id="paymentAmount"
+                    className="form-control"
+                    placeholder="Enter amount" 
+                    value={paymentAmount}
+                    onChange={(e) => setPaymentAmount(e.target.value)}
+                    required
+                  />
                 </div>
-                <div className="card-body">
-                    <div className="table-responsive">
-                        <table className="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Property</th>
-                                    <th>Due Date</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Sunshine Apartments (#203)</td>
-                                    <td>June 5, 2023</td>
-                                    <td>$1,200.00</td>
-                                    <td><span className="badge bg-warning text-dark">Pending</span></td>
-                                    <td>
-                                        <button className="btn btn-sm btn-primary">
-                                            <i className="fas fa-credit-card me-1"></i> Pay Now
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Mountain View Villa</td>
-                                    <td>June 10, 2023</td>
-                                    <td>$1,500.00</td>
-                                    <td><span className="badge bg-success">Paid</span></td>
-                                    <td>
-                                        <button className="btn btn-sm btn-outline-secondary" disabled>
-                                            <i className="fas fa-receipt me-1"></i> Receipt
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr className="table-light">
-                                    <td colSpan="2"><strong>Total</strong></td>
-                                    <td><strong>$2,700.00</strong></td>
-                                    <td colSpan="2"></td>
-                                </tr>
-                            </tfoot>
-                        </table>
+
+                <ul className="nav nav-tabs mb-3" role="tablist">
+                  <li className="nav-item">
+                    <button 
+                      className={`nav-link ${activeTab === 'online' ? 'active' : ''}`} 
+                      onClick={() => setActiveTab('online')}
+                      type="button"
+                    >
+                      <i className="fas fa-credit-card me-2"></i> Online Payment
+                    </button>
+                  </li>
+                  <li className="nav-item">
+                    <button 
+                      className={`nav-link ${activeTab === 'gpay' ? 'active' : ''}`} 
+                      onClick={() => setActiveTab('gpay')}
+                      type="button"
+                    >
+                      <i className="fas fa-google-pay me-2"></i> GPay
+                    </button>
+                  </li>
+                </ul>
+
+                {activeTab === 'online' && (
+                  <div className="card border-0 mb-4" style={{ backgroundColor: '#e6f0fa' }}>
+                    <div className="card-body">
+                      <h5 className="mb-3">Secure Payment</h5>
+                      
+                      <div className="row g-3">
+                        <div className="col-md-8">
+                          <div className="mb-3">
+                            <label htmlFor="cardNumber" className="form-label">Card Number</label>
+                            <input 
+                              type="text" 
+                              id="cardNumber"
+                              className="form-control"
+                              placeholder="1234 5678 9012 3456" 
+                              name="number"
+                              value={cardDetails.number}
+                              onChange={handleCardChange}
+                              required
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="col-md-2">
+                          <div className="mb-3">
+                            <label htmlFor="cardExpiry" className="form-label">Expiry</label>
+                            <input 
+                              type="text" 
+                              id="cardExpiry"
+                              className="form-control"
+                              placeholder="MM/YY" 
+                              name="expiry"
+                              value={cardDetails.expiry}
+                              onChange={handleCardChange}
+                              required
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="col-md-2">
+                          <div className="mb-3">
+                            <label htmlFor="cardCVV" className="form-label">CVV</label>
+                            <input 
+                              type="text" 
+                              id="cardCVV"
+                              className="form-control"
+                              placeholder="123" 
+                              name="cvv"
+                              value={cardDetails.cvv}
+                              onChange={handleCardChange}
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    
-                    <div className="mt-3 p-3 bg-light rounded">
-                        <h6><i className="fas fa-info-circle text-primary me-2"></i>Payment Instructions</h6>
-                        <p className="mb-1">• Make payment before due date to avoid late fees</p>
-                        <p className="mb-1">• A 5% late fee will be applied after due date</p>
-                        <p className="mb-0">• Contact landlord for any payment issues</p>
+                  </div>
+                )}
+
+                {activeTab === 'gpay' && (
+                  <div className="card border-0 mb-4" style={{ backgroundColor: '#e6f0fa' }}>
+                    <div className="card-body">
+                      <h5 className="mb-3">Manual GPay Payment</h5>
+                      <p>Please send your payment to the following GPay ID and confirm below:</p>
+                      
+                      <div className="card mb-3">
+                        <div className="card-body">
+                          <p><strong>GPay ID:</strong> Rentcollection@gmail.com</p>
+                          <p><strong>Amount:</strong> ${paymentAmount}</p>
+                          <p><strong>Reference:</strong> Rent-July2024-Apt4B</p>
+                        </div>
+                      </div>
+                      
+                      <div className="mb-3">
+                        <label htmlFor="paymentScreenshot" className="form-label">Upload Payment Screenshot</label>
+                        <input 
+                          type="file" 
+                          id="paymentScreenshot"
+                          className="form-control"
+                          onChange={handleFileChange}
+                          accept="image/*"
+                          required
+                        />
+                      </div>
                     </div>
-                </div>
+                  </div>
+                )}
+
+                <button type="submit" className="btn btn-primary w-100" onClick={handleSubmitPayment}>
+                  {activeTab === 'online' ? (
+                    <i className="fas fa-lock me-2"></i>
+                  ) : (
+                    <i className="fas fa-check-circle me-2"></i>
+                  )}
+                  {activeTab === 'online' ? `Pay $${paymentAmount} Now` : 'Confirm Payment Sent'}
+                </button>
+              </form>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-    );
+  );
 };
 
-export default ClientDashboard;
+export default RentPaymentDashboard;
